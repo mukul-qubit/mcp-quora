@@ -293,4 +293,4 @@ def question_comments(url: str, cursor: str = None) -> Dict:
 
 # Start the MCP server if this file is run directly
 if __name__ == "__main__":
-    mcp.start()
+    mcp.run(transport="sse", host="0.0.0.0", port=80)
