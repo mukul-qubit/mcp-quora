@@ -5,7 +5,6 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12.3"
 dependencies = [
-    "mcp[cli]>=1.6.0",
+    "fastmcp>=2.3.4",     # ← real server library (gives you FastMCP.method)
     "requests>=2.31.0",
-    "smithery>=0.1.3",
 ]
