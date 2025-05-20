@@ -1,5 +1,5 @@
 from fastmcp import FastMCP
-from typing import List, Dict, Optional, Any, Union
+from typing import List, Dict, Optional, Any
 import http.client
 import json
 import os
@@ -7,6 +7,7 @@ import urllib.parse
 import logging
 import traceback
 import time
+from starlette.responses import JSONResponse
 
 # Configure logging
 logging.basicConfig(
@@ -16,7 +17,13 @@ logging.basicConfig(
 logger = logging.getLogger('quora_api_tools')
 
 # Create MCP server
-mcp = FastMCP("QuoraProfiler")
+mcp = FastMCP("QuoraProfiler", stateless_http=True)
+
+app = mcp.http_app(path="/quora")
+
+@app.route("/", methods=["GET"])
+async def alive(request):
+    return JSONResponse({"status": "ok"})
 
 # Get Quora API credentials from environment variables
 QUORA_API_KEY = os.environ.get("QUORA_API_KEY", "xxxx")
@@ -291,6 +298,9 @@ def question_comments(url: str, cursor: str = None) -> Dict:
         logger.error(f"Error in question_comments tool: {str(e)}")
         return {"error": str(e), "exception_type": type(e).__name__}
 
-# Start the MCP server if this file is run directly
+
 if __name__ == "__main__":
-    mcp.run(transport="streamable-http", host="0.0.0.0", port=80, path="/quora")
+    import uvicorn
+    uvicorn.run(app,
+                host="0.0.0.0",
+                port=int(os.getenv("PORT", 80)))

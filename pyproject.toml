@@ -1,10 +1,19 @@
 [project]
 name = "mcp-quora"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.12.3"
+description = "FastMCP tool-suite that exposes Quora enrichment APIs."
+authors = [{name = "Mukul Kathayat", email = "mukul.kathayat@qubit.capital"}]
+requires-python = ">=3.12"
+
+# ── hard runtime deps ──
 dependencies = [
-    "fastmcp>=2.3.4",     # ← real server library (gives you FastMCP.method)
-    "requests>=2.31.0",
+    "fastmcp>=2.3.4",      # provides FastMCP & mcp.http_app()
+    "fastapi>=0.111.0",    # outer shell app
+    "uvicorn[standard]>=0.29.0",   # ASGI server used in the Docker CMD
+    "httpx>=0.27.0",       # your tools call Quora’s HTTP endpoints
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff", "pytest", "pre-commit",
 ]
